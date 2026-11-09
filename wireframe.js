@@ -55,7 +55,7 @@ function prims(R,fs){const{b,x,y,w,h:H}=R,L=String(b.label||'').split('\n').map(
  switch(b.type){
  case'columns':r(x,y,w,H,'pl');break;
  case'section':r(x,y,w,H,'pl');t(x+f*.8,y+f,first,f,'start',1);break;
- case'header':r(x,y,w,H);{const lg=Math.min(H*.6,48);r(x+H*.25,y+(H-lg)/2,lg,lg,'in');t(x+H*.25+lg+12,y+H/2,first,f,'start',1);for(let i=0;i<3;i++)r(x+w-(i+1)*(Math.min(110,w*.12)+12),y+H*.38,Math.min(110,w*.12),H*.24,'in')}break;
+ case'header':r(x,y,w,H);{const lg=Math.min(H*.6,48);r(x+H*.25,y+(H-lg)/2,lg,lg,'in');t(x+H*.25+lg+12,y+H/2,first,f,'start',1);const M=TsukuruReal.menuItems(b.content?b.content.menu:TsukuruReal.DEFAULT_MENU),n=M.length,g=12,iw=n?Math.min(110,w*.12,(w*.6-g*n)/n):0;M.forEach((m,i)=>{const ix=x+w-(n-i)*(iw+g);r(ix,y+H*.3,iw,H*.4,'pl');t(ix+iw/2,y+H/2,m.label,Math.min(f*.7,H*.2,iw/Math.max(2,m.label.length)))})}break;
  case'nav':{r(x,y,w,H);const n=Math.max(1,L.length),g=12,iw=(w-g*(n+1))/n;L.forEach((s,i)=>{r(x+g+i*(iw+g),y+H*.2,iw,H*.6,'pl');t(x+g+i*(iw+g)+iw/2,y+H/2,s,Math.min(f,H*.3,iw/Math.max(2,s.length)))})}break;
  case'hero':case'image':case'char':r(x,y,w,H);cross(x,y,w,H);tag(x+w/2,y+H/2,first);break;
  case'heading':r(x,y,w,H);t(x+f*.8,y+H/2,first,Math.min(f*1.3,H*.5),'start',1);break;
@@ -99,7 +99,7 @@ function toCanvas(wf,C){const{W,H,rects}=layout(wf),fs=FRAMES[wf.frame].fs;const
 /* ---------- HTML 骨組み ---------- */
 function toHTML(wf){const lines=b=>String(b.label||'').split('\n').map(s=>s.trim()).filter(Boolean),one=b=>esc(lines(b)[0]||PART[b.type].name);
  const part=(b,ind)=>{const I=ind,L=lines(b);switch(b.type){
-  case'header':return`${I}<header class="site-header">\n${I}  <p class="site-title"><a href="#">${one(b)}</a></p>\n${I}</header>`;
+  case'header':{const M=TsukuruReal.menuItems(b.content?.menu);return`${I}<header class="site-header">\n${I}  <p class="site-title"><a href="#">${one(b)}</a></p>${M.length?`\n${I}  <nav aria-label="メイン">\n${I}    <ul>\n${M.map(m=>`${I}      <li><a href="${esc(TsukuruReal.linkURL(m.href))}">${esc(m.label)}</a></li>`).join('\n')}\n${I}    </ul>\n${I}  </nav>`:''}\n${I}</header>`}
   case'nav':return`${I}<nav class="site-nav" aria-label="メイン">\n${I}  <ul>\n${(L.length?L:['ホーム']).map(s=>`${I}    <li><a href="#">${esc(s)}</a></li>`).join('\n')}\n${I}  </ul>\n${I}</nav>`;
   case'hero':return`${I}<section class="hero">\n${I}  <h1>${one(b)}</h1>\n${I}  <img src="hero.jpg" alt="" width="1440" height="600">\n${I}</section>`;
   case'heading':return`${I}<h2>${one(b)}</h2>`;
@@ -167,7 +167,8 @@ function wireframe(box){const st=load();let wf=st.draft,sel=null,view='wire',sav
   const up=btn('↑','ghost wf-ib wf-up',()=>mv(-1),nm+'を上へ');up.disabled=i===0;const down=btn('↓','ghost wf-ib wf-down',()=>mv(1),nm+'を下へ');down.disabled=i===bs.length-1;
   acts.append(up,down,btn('削除','ghost wf-ib wf-del',()=>{bs.splice(i,1);sel=null;save();draw()},nm+'を削除'));head.append(acts);li.append(head);
   if(b.id===sel){const edit=h('div','wf-editor');edit.setAttribute('role','group');edit.setAttribute('aria-label',nm+'の内容');
-   if(b.type!=='columns')field(edit,b,b.type==='heading'?'見出しテキスト':b.type==='text'?'本文テキスト':b.type==='button'?'ボタンの文字':'表示する文字','text','textarea');
+   if(b.type!=='columns')field(edit,b,b.type==='header'?'サイト名（ロゴの文字）':b.type==='heading'?'見出しテキスト':b.type==='text'?'本文テキスト':b.type==='button'?'ボタンの文字':'表示する文字','text','textarea');
+   if(b.type==='header'){field(edit,b,'メニュー項目（1行に1つ。「ラベル | URL」でリンク先も指定。空ならメニューなし）','menu','textarea');edit.append(h('p','wt-desc','例：ホーム | ./　／　お問い合わせ | #contact'))}
    if(b.type==='heading'){const lab=h('label','wf-lab');lab.append(h('span','','見出しレベル'));const se=h('select','wf-select');se.setAttribute('aria-label','見出しレベル');for(const v of ['h1','h2','h3']){const o=h('option','',v);o.value=v;o.selected=v===b.content.level;se.append(o)}se.onchange=()=>{b.content.level=se.value;save();drawStage()};lab.append(se);edit.append(lab,h('p','wt-desc','最初の見出しはh1、以降は飛び級しない階層に自動調整します。'))}
    if(b.type==='image'||b.type==='hero')imageFields(edit,b);
    if(b.type==='button'||b.type==='hero'){if(b.type==='hero')field(edit,b,'ボタンの文字','buttonText');field(edit,b,'リンク先URL（https://… / #… / ./…）','href','text')}
