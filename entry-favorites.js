@@ -1,0 +1,14 @@
+(()=>{'use strict';const S=AtlasStudio,{el,button}=S,key='atlas-desk-entry-favorites-v1';
+function valid(r){return r&&['web','selector','reference','progression'].includes(r.type)&&['web','music','color'].includes(r.domain)&&typeof r.name==='string'&&r.name.length<200&&typeof r.title==='string'&&r.title.length<240}
+function read(){const v=S.load(key,[]);return Array.isArray(v)?v.filter(valid):[]}
+function id(r){return JSON.stringify([r.type,r.domain,r.kind||'',r.name,r.tonic||''])}
+function saved(r){return read().some(x=>id(x)===id(r))}
+function toggle(r){let rows=read();rows=saved(r)?rows.filter(x=>id(x)!==id(r)):[r,...rows];S.save(key,rows);window.dispatchEvent(new Event('atlasEntryFavoritesChanged'));}
+function favoriteButton(r){const b=button('',()=>toggle(r),'entry-favorite-button');b.type='button';const refresh=()=>{b.textContent=saved(r)?'この項目は保存済み':'この項目をお気に入りに保存';b.setAttribute('aria-pressed',String(saved(r)))};refresh();b.addEventListener('click',refresh);return b}
+function open(r){if(r.type==='web')return AtlasWebCatalog.open(r);if(r.type==='selector')return AtlasSelectors.open(r.name);if(r.type==='reference')return AtlasReference.open(r.domain,r.name);if(r.type==='progression')return AtlasDiscovery.open(r)}
+function storageNote(){const note=el('aside',undefined,'entry-storage-note');note.append(el('strong','保存先は、この端末のこのブラウザーです。'),el('p','別の端末・ブラウザーには自動同期されません。端末を変える前に「保存・バックアップ」で一括バックアップを書き出し、移動先で読み込んでください。'));return note}
+function render(domain=''){const section=el('section',undefined,'entry-favorites-list');section.append(el('h2','保存した説明・コード・進行'),storageNote());const rows=read().filter(r=>AtlasEase.prefs().domains.includes(r.domain)&&(!domain||r.domain===domain));if(!rows.length)section.append(el('p','各項目の「この項目をお気に入りに保存」から、特定のコード・用語・進行をここへ登録できます。'));for(const r of rows){const card=el('article',undefined,'entry-favorite-card');const link=button(r.title,()=>open(r),'entry-favorite-open');link.append(el('small',({web:'コード',selector:'セレクター',reference:'用語・詳説',progression:'コード進行'})[r.type]));const remove=button('保存を解除',()=>{toggle(r);card.remove()},'entry-favorite-remove');card.append(link,remove);section.append(card)}return section}
+window.AtlasEntryFavorites={button:favoriteButton,render,read,id,open};
+function attach(){for(const card of document.querySelectorAll('#webCards > article')){if(card.querySelector('.entry-favorite-button'))continue;const host=card.querySelector(':scope > details > .catalog-body');if(host&&card.dataset.entryName)host.prepend(favoriteButton({type:'web',domain:'web',kind:card.dataset.webKind,name:card.dataset.entryName,title:card.dataset.entryName}))}}
+new MutationObserver(attach).observe(document.getElementById('webCards'),{childList:true,subtree:true});attach();document.getElementById('libraryPage')?.prepend(storageNote());window.AtlasDiscovery?.render();
+})();

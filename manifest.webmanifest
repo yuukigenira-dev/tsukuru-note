@@ -1,0 +1,31 @@
+{
+  "name": "つくるノート — 調べる・学ぶ制作ノート",
+  "short_name": "つくるノート",
+  "lang": "ja",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f8fa",
+  "theme_color": "#435d78",
+  "icons": [
+    {
+      "src": "assets/brand/atlas-icon-v6-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/brand/atlas-icon-v6-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/brand/atlas-maskable-v6-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

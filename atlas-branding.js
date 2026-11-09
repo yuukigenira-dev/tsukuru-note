@@ -1,0 +1,1 @@
+(()=>{'use strict';const brand=document.querySelector('.brand');if(brand){const t=document.createElement('span');t.className='tsukuru-wordmark';t.textContent='つくるノート';brand.replaceChildren(t)}document.querySelector('meta[name="apple-mobile-web-app-title"]')?.setAttribute('content','つくるノート');})();

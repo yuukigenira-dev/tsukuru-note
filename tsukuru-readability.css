@@ -1,0 +1,58 @@
+/* つくるノート — 読みやすさレイヤー（最後に読み込み） */
+:root{--tn-ink:#1f2b37;--tn-sub:#3d5063;--tn-gap:1.25rem}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{font-size:16px;line-height:1.7;color:var(--tn-ink);font-feature-settings:"palt" 0;letter-spacing:.01em}
+@media(max-width:650px){body{font-size:15px}}
+/* 本文の最小サイズ（小さく指定された本文系のみ。見出し・カードタイトルの大きさは保つ） */
+body :where(p,li,dd,dt,td,th,label,small,footer,figcaption,summary,.hint,.note,.muted,.genre-desc,.desk-intro,.desk-caption,.desk-nav-label,.atlas-launch-tagline,.desk-crumb span,.desk-chips span,.desk-back span,.desk-tool-link span span,.desk-tool-link small,.desk-section-head span):not(.keyboard *):not(svg *){font-size:max(15px,var(--tn-min,0px))!important}
+body :where(.desk-tool-link strong){font-size:17px!important}
+body :where(button,select,input,textarea):not(.keyboard *){font-size:max(15px,1em)}
+@media(min-width:651px){body :where(p,li,dd,td,figcaption,.hint,.note,.desk-intro){font-size:16px!important}}
+body :where(p,li,dd,td,figcaption,.hint,.note,.desk-intro){line-height:1.75!important}
+body :where(p,li,dd,.hint,.note,.desk-intro){max-width:40em}
+/* カード内の小ラベルは控えめに */
+.desk-tool-link small{font-size:13px!important;color:var(--tn-sub)!important;letter-spacing:.04em}
+/* 英字ラベルは装飾なので小さめ可、ただし13px以上 */
+.genre-en,.eyebrow{font-size:13px!important;letter-spacing:.08em}
+/* 見出し：段階をはっきり */
+body h1{line-height:1.35;letter-spacing:.02em}
+body :where(h2){font-size:clamp(19px,1.1rem + .4vw,22px)!important;line-height:1.45!important;margin-top:1.6em!important;margin-bottom:.6em!important;font-weight:700;color:var(--tn-ink)}
+body :where(h3){font-size:17px!important;line-height:1.5!important;margin-top:1.2em!important;margin-bottom:.4em!important;font-weight:700}
+body :where(h4){font-size:16px!important;line-height:1.5!important}
+/* コントラスト：薄いグレー文字を濃く */
+body :where(small,.hint,.muted,.desk-caption,.desk-nav-label,.desk-intro,.footer,.atlas-launch-tagline,.subtitle,.genre-desc){color:var(--tn-sub)!important;opacity:1!important}
+/* タップ領域 44px 以上 */
+body :where(button,select,[role=button],summary,.chip,.pill,a.button){min-height:44px!important;min-width:44px}
+body :where(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]),select){min-height:44px!important}
+body :where(input[type=checkbox],input[type=radio]){width:22px!important;height:22px!important}
+body label:has(>input[type=checkbox]),body label:has(>input[type=radio]){min-height:44px;display:inline-flex;align-items:center;gap:.6em}
+/* 余白：詰まりすぎたリストを少しゆったり */
+body :where(ul,ol)>li+li{margin-top:.35em}
+body :where(section,article)+:where(section,article){margin-top:var(--tn-gap)}
+/* ブランド文字（ロゴ画像の代わり） */
+.tsukuru-wordmark{font-weight:800;letter-spacing:.06em;color:#c8285f;font-size:22px!important;line-height:1.2;white-space:nowrap}
+.tsukuru-home-wordmark{display:block;font-size:clamp(40px,10vw,64px)!important;line-height:1.2;color:#d6265f;text-shadow:0 3px 0 rgba(0,0,0,.08)}
+.tsukuru-menu-wordmark{font-size:20px!important}
+#easeBoot strong{letter-spacing:.08em!important}
+:focus-visible{outline:3px solid #2f6fb3;outline-offset:2px}
+/* 補助テキストのコントラスト（AA 4.5:1 以上） */
+.desk-back span,.desk-crumb span,.desk-chips>span,.desk-section-head span,.desk-tool-link span span,.desk-header span{color:var(--tn-sub)!important}
+.desk-back{min-width:44px!important}
+/* モバイル：横スクロール防止・セーフエリア・下部ナビ */
+html,body{overflow-x:hidden;max-width:100%}
+img,video,canvas,table,pre{max-width:100%}
+pre,code{overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+@media(max-width:650px){
+ body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+ .bottom-nav{padding-bottom:max(8px,env(safe-area-inset-bottom))!important}
+ .bottom-nav button{min-height:52px!important;font-size:13px!important}
+ .shell{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+ .desk-header{padding-top:max(8px,env(safe-area-inset-top))}
+ .desk-crumb{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+}
+/* 微調整 */
+body .desk-tool-link span small.x,body .desk-tool-link>span>small{font-size:13px!important;font-weight:600}
+body .desk-tool-link>span>span{font-weight:500!important;color:var(--tn-sub)!important}
+body .desk-crumb{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center;gap:.4em;white-space:nowrap}
+body .desk-header button,body .desk-portal button{font-size:max(15px,1em)!important}
+body .desk-crumb strong,body .desk-header button span{font-size:15px!important}

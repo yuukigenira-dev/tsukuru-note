@@ -1,0 +1,195 @@
+Creative Atlas font specimens
+The original fonts are distributed through Google Fonts. Each specimen file is a fixed-text subset delivered by the Google Fonts CSS API. Use each official family page to obtain the full font. Font license texts and copyright notices are included in each fonts/<family>/LICENSE.txt.
+
+Noto Sans JP — SIL OFL 1.1
+https://fonts.google.com/specimen/Noto+Sans+JP
+https://raw.githubusercontent.com/google/fonts/main/ofl/notosansjp/OFL.txt
+
+Noto Serif JP — SIL OFL 1.1
+https://fonts.google.com/specimen/Noto+Serif+JP
+https://raw.githubusercontent.com/google/fonts/main/ofl/notoserifjp/OFL.txt
+
+Zen Kaku Gothic New — SIL OFL 1.1
+https://fonts.google.com/specimen/Zen+Kaku+Gothic+New
+https://raw.githubusercontent.com/google/fonts/main/ofl/zenkakugothicnew/OFL.txt
+
+Zen Maru Gothic — SIL OFL 1.1
+https://fonts.google.com/specimen/Zen+Maru+Gothic
+https://raw.githubusercontent.com/google/fonts/main/ofl/zenmarugothic/OFL.txt
+
+Zen Old Mincho — SIL OFL 1.1
+https://fonts.google.com/specimen/Zen+Old+Mincho
+https://raw.githubusercontent.com/google/fonts/main/ofl/zenoldmincho/OFL.txt
+
+Shippori Mincho — SIL OFL 1.1
+https://fonts.google.com/specimen/Shippori+Mincho
+https://raw.githubusercontent.com/google/fonts/main/ofl/shipporimincho/OFL.txt
+
+Kaisei Decol — SIL OFL 1.1
+https://fonts.google.com/specimen/Kaisei+Decol
+https://raw.githubusercontent.com/google/fonts/main/ofl/kaiseidecol/OFL.txt
+
+Kaisei Opti — SIL OFL 1.1
+https://fonts.google.com/specimen/Kaisei+Opti
+https://raw.githubusercontent.com/google/fonts/main/ofl/kaiseiopti/OFL.txt
+
+Kiwi Maru — SIL OFL 1.1
+https://fonts.google.com/specimen/Kiwi+Maru
+https://raw.githubusercontent.com/google/fonts/main/ofl/kiwimaru/OFL.txt
+
+M PLUS 1p — SIL OFL 1.1
+https://fonts.google.com/specimen/M+PLUS+1p
+https://raw.githubusercontent.com/google/fonts/main/ofl/mplus1p/OFL.txt
+
+M PLUS Rounded 1c — SIL OFL 1.1
+https://fonts.google.com/specimen/M+PLUS+Rounded+1c
+https://raw.githubusercontent.com/google/fonts/main/ofl/roundedmplus1c/OFL.txt
+
+Kosugi — Apache 2.0
+https://fonts.google.com/specimen/Kosugi
+https://raw.githubusercontent.com/google/fonts/main/apache/kosugi/LICENSE.txt
+
+Kosugi Maru — Apache 2.0
+https://fonts.google.com/specimen/Kosugi+Maru
+https://raw.githubusercontent.com/google/fonts/main/apache/kosugimaru/LICENSE.txt
+
+Yuji Syuku — SIL OFL 1.1
+https://fonts.google.com/specimen/Yuji+Syuku
+https://raw.githubusercontent.com/google/fonts/main/ofl/yujisyuku/OFL.txt
+
+Yusei Magic — SIL OFL 1.1
+https://fonts.google.com/specimen/Yusei+Magic
+https://raw.githubusercontent.com/google/fonts/main/ofl/yuseimagic/OFL.txt
+
+Dela Gothic One — SIL OFL 1.1
+https://fonts.google.com/specimen/Dela+Gothic+One
+https://raw.githubusercontent.com/google/fonts/main/ofl/delagothicone/OFL.txt
+
+DotGothic16 — SIL OFL 1.1
+https://fonts.google.com/specimen/DotGothic16
+https://raw.githubusercontent.com/google/fonts/main/ofl/dotgothic16/OFL.txt
+
+RocknRoll One — SIL OFL 1.1
+https://fonts.google.com/specimen/RocknRoll+One
+https://raw.githubusercontent.com/google/fonts/main/ofl/rocknrollone/OFL.txt
+
+Reggae One — SIL OFL 1.1
+https://fonts.google.com/specimen/Reggae+One
+https://raw.githubusercontent.com/google/fonts/main/ofl/reggaeone/OFL.txt
+
+Hachi Maru Pop — SIL OFL 1.1
+https://fonts.google.com/specimen/Hachi+Maru+Pop
+https://raw.githubusercontent.com/google/fonts/main/ofl/hachimarupop/OFL.txt
+
+Potta One — SIL OFL 1.1
+https://fonts.google.com/specimen/Potta+One
+https://raw.githubusercontent.com/google/fonts/main/ofl/pottaone/OFL.txt
+
+Train One — SIL OFL 1.1
+https://fonts.google.com/specimen/Train+One
+https://raw.githubusercontent.com/google/fonts/main/ofl/trainone/OFL.txt
+
+Mochiy Pop One — SIL OFL 1.1
+https://fonts.google.com/specimen/Mochiy+Pop+One
+https://raw.githubusercontent.com/google/fonts/main/ofl/mochiypopone/OFL.txt
+
+Klee One — SIL OFL 1.1
+https://fonts.google.com/specimen/Klee+One
+https://raw.githubusercontent.com/google/fonts/main/ofl/kleeone/OFL.txt
+
+Inter — SIL OFL 1.1
+https://fonts.google.com/specimen/Inter
+https://raw.githubusercontent.com/google/fonts/main/ofl/inter/OFL.txt
+
+Montserrat — SIL OFL 1.1
+https://fonts.google.com/specimen/Montserrat
+https://raw.githubusercontent.com/google/fonts/main/ofl/montserrat/OFL.txt
+
+Poppins — SIL OFL 1.1
+https://fonts.google.com/specimen/Poppins
+https://raw.githubusercontent.com/google/fonts/main/ofl/poppins/OFL.txt
+
+Lato — SIL OFL 1.1
+https://fonts.google.com/specimen/Lato
+https://raw.githubusercontent.com/google/fonts/main/ofl/lato/OFL.txt
+
+Raleway — SIL OFL 1.1
+https://fonts.google.com/specimen/Raleway
+https://raw.githubusercontent.com/google/fonts/main/ofl/raleway/OFL.txt
+
+Oswald — SIL OFL 1.1
+https://fonts.google.com/specimen/Oswald
+https://raw.githubusercontent.com/google/fonts/main/ofl/oswald/OFL.txt
+
+Bebas Neue — SIL OFL 1.1
+https://fonts.google.com/specimen/Bebas+Neue
+https://raw.githubusercontent.com/google/fonts/main/ofl/bebasneue/OFL.txt
+
+Anton — SIL OFL 1.1
+https://fonts.google.com/specimen/Anton
+https://raw.githubusercontent.com/google/fonts/main/ofl/anton/OFL.txt
+
+Playfair Display — SIL OFL 1.1
+https://fonts.google.com/specimen/Playfair+Display
+https://raw.githubusercontent.com/google/fonts/main/ofl/playfairdisplay/OFL.txt
+
+Cormorant Garamond — SIL OFL 1.1
+https://fonts.google.com/specimen/Cormorant+Garamond
+https://raw.githubusercontent.com/google/fonts/main/ofl/cormorantgaramond/OFL.txt
+
+Libre Baskerville — SIL OFL 1.1
+https://fonts.google.com/specimen/Libre+Baskerville
+https://raw.githubusercontent.com/google/fonts/main/ofl/librebaskerville/OFL.txt
+
+Lora — SIL OFL 1.1
+https://fonts.google.com/specimen/Lora
+https://raw.githubusercontent.com/google/fonts/main/ofl/lora/OFL.txt
+
+Merriweather — SIL OFL 1.1
+https://fonts.google.com/specimen/Merriweather
+https://raw.githubusercontent.com/google/fonts/main/ofl/merriweather/OFL.txt
+
+Roboto Slab — Apache 2.0
+https://fonts.google.com/specimen/Roboto+Slab
+https://raw.githubusercontent.com/google/fonts/main/apache/robotoslab/LICENSE.txt
+
+EB Garamond — SIL OFL 1.1
+https://fonts.google.com/specimen/EB+Garamond
+https://raw.githubusercontent.com/google/fonts/main/ofl/ebgaramond/OFL.txt
+
+DM Serif Display — SIL OFL 1.1
+https://fonts.google.com/specimen/DM+Serif+Display
+https://raw.githubusercontent.com/google/fonts/main/ofl/dmserifdisplay/OFL.txt
+
+Caveat — SIL OFL 1.1
+https://fonts.google.com/specimen/Caveat
+https://raw.githubusercontent.com/google/fonts/main/ofl/caveat/OFL.txt
+
+Dancing Script — SIL OFL 1.1
+https://fonts.google.com/specimen/Dancing+Script
+https://raw.githubusercontent.com/google/fonts/main/ofl/dancingscript/OFL.txt
+
+Pacifico — SIL OFL 1.1
+https://fonts.google.com/specimen/Pacifico
+https://raw.githubusercontent.com/google/fonts/main/ofl/pacifico/OFL.txt
+
+Lobster — SIL OFL 1.1
+https://fonts.google.com/specimen/Lobster
+https://raw.githubusercontent.com/google/fonts/main/ofl/lobster/OFL.txt
+
+Great Vibes — SIL OFL 1.1
+https://fonts.google.com/specimen/Great+Vibes
+https://raw.githubusercontent.com/google/fonts/main/ofl/greatvibes/OFL.txt
+
+Space Mono — SIL OFL 1.1
+https://fonts.google.com/specimen/Space+Mono
+https://raw.githubusercontent.com/google/fonts/main/ofl/spacemono/OFL.txt
+
+JetBrains Mono — SIL OFL 1.1
+https://fonts.google.com/specimen/JetBrains+Mono
+https://raw.githubusercontent.com/google/fonts/main/ofl/jetbrainsmono/OFL.txt
+
+Source Code Pro — SIL OFL 1.1
+https://fonts.google.com/specimen/Source+Code+Pro
+https://raw.githubusercontent.com/google/fonts/main/ofl/sourcecodepro/OFL.txt
+任意文の比較・制作ツールではGoogle Fonts CSS2 APIから必要な文字のデータを取得します。各書体のライセンスは同梱のものに従います。

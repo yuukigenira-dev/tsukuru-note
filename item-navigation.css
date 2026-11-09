@@ -1,0 +1,3 @@
+.desk-item-crumb{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--accent)}
+.quiz-rules{margin:16px 0;font-size:14px;line-height:1.8}
+@media(max-width:650px){.desk-crumb{flex-wrap:wrap;gap:3px 8px}.desk-item-separator{display:none}.desk-item-crumb{flex-basis:100%;font-size:11px;line-height:1.5}.desk-crumb strong{font-size:11px}}

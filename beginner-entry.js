@@ -1,0 +1,1 @@
+(()=>{for(const b of document.querySelectorAll('[data-page="web"]'))b.onclick=()=>AtlasStudio.open('web','css');const card=document.querySelector('.workbench-card.web');if(card)card.onclick=()=>AtlasStudio.open('web','css');})();

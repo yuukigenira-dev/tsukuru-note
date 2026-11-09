@@ -1,0 +1,16 @@
+Instrument sample credits
+
+Instrument samples from tonejs-instruments by Nicholaus P. Brosowsky.
+https://github.com/nbrosowsky/tonejs-instruments
+Repository revision: 622c2f1c32c8cfce4158ddc3eb26e518ddef37e5
+Sample license: Creative Commons Attribution 3.0 Unported (CC BY 3.0)
+https://creativecommons.org/licenses/by/3.0/
+
+Piano: VSCO 2 / Versilian Studios source recordings, edited in the tonejs-instruments collection.
+Guitar: Classical guitar samples by quartertone (Freesound pack 11573), edited in the tonejs-instruments collection.
+Source provenance: https://github.com/nbrosowsky/tonejs-instruments/blob/master/sample-source-info.txt
+
+The distribution collection describes edits for trimming silence, on/off ramps, volume matching, normalization, noise removal, and pitch correction.
+Creative Atlas selects a subset of the supplied MP3 files. The selected recordings are encoded in JavaScript sample banks without changing the MP3 bytes.
+Runtime playback transposes the nearest recording when necessary and applies note release envelopes and output compression.
+No endorsement by the original creators is implied.

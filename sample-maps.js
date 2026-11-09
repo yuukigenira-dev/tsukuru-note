@@ -1,0 +1,1 @@
+window.ATLAS_SAMPLE_MAPS={"piano":{"script":"samples/piano-bank.js","notes":[45,57,69,81,93,36,48,60,72,84,96,39,51,63,75,87,42,54,66,78,90]},"guitar":{"script":"samples/guitar-bank.js","notes":[45,57,69,81,82,35,47,59,71,49,61,73,38,50,74,63,40,52,64,76,42,54,66,78,55,79,44,68,80]}};
