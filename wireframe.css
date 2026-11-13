@@ -86,3 +86,12 @@
 @media (max-width:500px){
   .wf-view-switch .wf-segtop,.wf-view-switch .wf-segsub{display:block;line-height:1.2}
 }
+
+/* キービジュアル／画像の高さハンドルと数値入力 */
+.wf-canvas{position:relative}
+.wf-resize{position:absolute;z-index:2;box-sizing:border-box;margin:0;padding:0;border:0;min-width:44px;min-height:44px;height:44px;background:transparent;cursor:ns-resize;touch-action:none;appearance:none;-webkit-appearance:none;user-select:none}
+.wf-resize::after{content:"";position:absolute;left:12%;right:12%;top:50%;height:6px;margin-top:-3px;border-radius:999px;background:var(--wf-sel);box-shadow:0 0 0 2px var(--wf-bg);pointer-events:none}
+.wf-resize:focus-visible{outline:3px solid var(--tn-accent);outline-offset:2px}
+.wf-height-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.wf-height-row .wf-height-input{flex:1 1 8em;min-width:8em}
+.wf-height-row .wf-height-reset{min-height:var(--tn-tap);min-width:var(--tn-tap);flex:none}

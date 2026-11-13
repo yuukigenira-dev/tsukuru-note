@@ -19,6 +19,14 @@ const GAME_PARTS=[['logo','タイトルロゴ','タイトルロゴ','tc',.5,.2],
 const PART=Object.fromEntries([...WEB_PARTS.map(p=>[p[0],{name:p[1],label:p[2],h:p[3]}]),...GAME_PARTS.map(p=>[p[0],{name:p[1],label:p[2],pos:p[3],bw:p[4],bh:p[5]}])]);
 const SIZES=[['S','S'],['M','M'],['L','L']],VPOS=[['t','上'],['m','中'],['b','下']],HPOS=[['l','左'],['c','中央'],['r','右']];
 const SCALE={S:.7,M:1,L:1.3};
+const HMIN=120,HMAX=2000,HSNAP=8;
+const TALL_TYPES=new Set(['hero','image','char']);
+function defaultH(b,frame){const F=FRAMES[frame];if(F.kind==='stack')return F.hs[b.h]||F.hs.M;const p=PART[b.type]||{bh:.2},s=SCALE[b.h]||1;return Math.min(F.H-F.pad*2,F.H*p.bh*s)}
+function clampH(n,snap){n=Number(n);if(!Number.isFinite(n))return null;n=Math.min(HMAX,Math.max(HMIN,n));return Math.round(snap?Math.round(n/HSNAP)*HSNAP:n)}
+function customH(b,frame){const n=Number(b.heights?.[frame]);return Number.isFinite(n)?clampH(n,false):null}
+function blockH(b,frame){return customH(b,frame)??defaultH(b,frame)}
+function setBlockH(b,frame,px,snap=true){const n=clampH(px,snap);if(n==null)return n;if(!b.heights||typeof b.heights!=='object')b.heights={};b.heights[frame]=n;return n}
+function clearBlockH(b,frame){if(!b.heights)return;delete b.heights[frame];if(!Object.keys(b.heights).length)delete b.heights}
 function newBlock(type,frame){const p=PART[type];return TsukuruReal.normalize({blocks:[{id:uid(),type,label:p.label,h:p.h||'M',w:'full',pos:frame==='game'?p.pos||'mc':'mc'}]}).blocks[0]}
 
 /* ---------- 1画面目（ファーストビュー）の線 ---------- */
@@ -42,7 +50,7 @@ function layout(wf){const F=FRAMES[wf.frame],out=[];
  if(F.kind==='stack'){
   // 子カラムも同じ配置計算に通す。SVGとPNGに別々のレイアウトを持たせない。
   function stack(bs,x,start,w,nested=false){let y=start;
-   function place(b,bx,by,bw){const R={b,x:bx,y:by,w:bw,h:F.hs[b.h]||F.hs.M,nested};out.push(R);
+   function place(b,bx,by,bw){const R={b,x:bx,y:by,w:bw,h:blockH(b,wf.frame),nested};out.push(R);
     if(b.type==='columns'){const cols=b.children||[],n=wf.frame==='phone'?1:b.cols,g=F.gap,cw=(bw-g*(n-1))/n;let bottom=by;
      if(n===1){for(const col of cols){bottom=stack(col,bx,bottom+g,bw,true)+g}}
      else cols.forEach((col,i)=>{bottom=Math.max(bottom,stack(col,bx+i*(cw+g),by+g,cw,true)+g)});
@@ -52,7 +60,7 @@ function layout(wf){const F=FRAMES[wf.frame],out=[];
    for(let i=0;i<bs.length;i++){const b=bs[i];if(b.w==='half'){const cw=(w-F.gap)/2;let hh=place(b,x,y,cw);if(bs[i+1]?.w==='half')hh=Math.max(hh,place(bs[++i],x+cw+F.gap,y,cw));y+=hh+F.gap}else y+=place(b,x,y,w)+F.gap}
    return bs.length?y-F.gap:start}
   const end=stack(wf.blocks,F.pad,F.pad,F.W-F.pad*2);return{W:F.W,H:Math.max(F.H,Math.ceil(end+F.pad)),rects:out}}
- for(const b of wf.blocks){const p=PART[b.type]||{bw:.3,bh:.2},s=SCALE[b.h]||1;let w=b.w==='full'?F.W-F.pad*2:Math.min(F.W-F.pad*2,F.W*p.bw*s),hh=Math.min(F.H-F.pad*2,F.H*p.bh*s);
+ for(const b of wf.blocks){const p=PART[b.type]||{bw:.3,bh:.2},s=SCALE[b.h]||1;let w=b.w==='full'?F.W-F.pad*2:Math.min(F.W-F.pad*2,F.W*p.bw*s),hh=blockH(b,wf.frame);
   const v=b.pos[0],c=b.pos[1];const x=c==='l'?F.pad:c==='r'?F.W-F.pad-w:(F.W-w)/2,y=v==='t'?F.pad:v==='b'?F.H-F.pad-hh:(F.H-hh)/2;out.push({b,x,y,w,h:hh})}
  return{W:F.W,H:F.H,rects:out}}
 
@@ -153,7 +161,12 @@ function wireframe(box){const st=load(),prefs=viewPrefs();let wf=st.draft,sel=nu
  const exp=h('section','wt-card wt-open wf-exp');const savedSec=h('section','wt-card wt-open wf-saved');
  panel.append(h('h2','wt-title','プレビュー'),viewBox,codeTools,meta,stage,foldBox,h('h2','wt-title','部品を追加'),palette,h('h2','wt-title','ブロック'),list);
  box.append(tabs,panel,storageNotice,status,exp,savedSec);
- const pickBlock=id=>{sel=id;draw();const item=list.querySelector('[data-id="'+CSS.escape(id)+'"]');if(item){item.scrollIntoView({block:'center',behavior:'smooth'});const c=item.querySelector('.wf-editor textarea,.wf-editor select,.wf-editor [aria-checked="true"]')||item.querySelector('.wf-pick');c?.focus({preventScroll:true})}};
+ const pickBlock=id=>{sel=id;draw();const item=list.querySelector('[data-id="'+CSS.escape(id)+'"]');if(item){item.scrollIntoView({block:'nearest',behavior:'smooth'});const c=item.querySelector('.wf-editor textarea,.wf-editor select,.wf-editor [aria-checked="true"]')||item.querySelector('.wf-pick');c?.focus({preventScroll:true})}};
+ let heightDrag=null;
+ document.addEventListener('pointermove',e=>{if(!heightDrag)return;e.preventDefault();const s=stage.querySelector('.wf-svg');const scale=s?s.getBoundingClientRect().width/layout(wf).W:1;setBlockH(heightDrag.b,heightDrag.frame,heightDrag.startH+(e.clientY-heightDrag.startY)/scale,true);drawStage();syncHeightUI(heightDrag.b)},{passive:false});
+ document.addEventListener('pointerup',()=>{if(!heightDrag)return;const b=heightDrag.b;heightDrag=null;save();drawStage();syncHeightUI(b)});
+ document.addEventListener('pointercancel',()=>{if(!heightDrag)return;const b=heightDrag.b;heightDrag=null;save();drawStage();syncHeightUI(b)});
+ window.addEventListener('resize',()=>{const handle=stage.querySelector('.wf-resize'),s=stage.querySelector('.wf-svg');if(!handle||!s||!sel)return;const R=layout(wf).rects.find(r=>r.b.id===sel);if(R)placeResizeHandle(handle,s,R)});
  function seg(name,opts,cur,on){const g=h('div','wf-seg');g.setAttribute('role','radiogroup');g.setAttribute('aria-label',name);g.append(h('span','wf-seglab',name));for(const[v,t]of opts){const b=h('button','wf-segbtn',t);b.type='button';b.setAttribute('role','radio');b.setAttribute('aria-checked',String(v===cur));b.setAttribute('aria-label',name+' '+t);b.tabIndex=v===cur?0:-1;b.onclick=()=>on(v);b.onkeydown=e=>{if(!['ArrowRight','ArrowLeft','ArrowDown','ArrowUp'].includes(e.key))return;e.preventDefault();const i=opts.findIndex(o=>o[0]===v),n=opts[(i+(['ArrowRight','ArrowDown'].includes(e.key)?1:opts.length-1))%opts.length];on(n[0]);box.querySelector('[role="radiogroup"][aria-label="'+CSS.escape(name)+'"] [aria-label="'+CSS.escape(name+' '+n[1])+'"]')?.focus()};g.append(b)}return g}
  function draw(){for(const b of tabs.children){const on=b.dataset.f===wf.frame;b.setAttribute('aria-selected',String(on));b.tabIndex=on?0:-1}panel.setAttribute('aria-labelledby','wfTab-'+wf.frame);
   const F=FRAMES[wf.frame],Lo=layout(wf);stage.dataset.frame=wf.frame;drawStage();viewBox.replaceChildren(seg('表示',[['wire','ワイヤーフレーム表示'],['real','実表示'],['code','HTMLコード']],view,v=>{view=v;persistView();draw()}));const wireBtn=viewBox.querySelector('[aria-label="表示 ワイヤーフレーム表示"]');if(wireBtn){wireBtn.replaceChildren(h('span','wf-segtop','ワイヤーフレーム'),h('span','wf-segsub','表示'))}codeTools.hidden=view!=='code';if(view==='code'){const renderCodeTabs=()=>codeTabBox.replaceChildren(seg('コードの種類',[['html','HTML'],['css','CSS']],codeTab,v=>{codeTab=v;persistView();renderCodeTabs();drawStage()}));renderCodeTabs();updateCodeNote()}
@@ -164,7 +177,7 @@ function wireframe(box){const st=load(),prefs=viewPrefs();let wf=st.draft,sel=nu
   drawExport();drawSaved()}
  function drawStage(){
   stage.classList.toggle('wf-code-mode',view==='code');
-  if(view==='wire'){stage.replaceChildren(svg(wf,sel,pickBlock));return}
+  if(view==='wire'){const s=svg(wf,sel,pickBlock);const R=layout(wf).rects.find(r=>r.b.id===sel);const live=!!heightDrag&&stage.querySelector('.wf-canvas .wf-resize');if(live){stage.querySelector('.wf-svg')?.replaceWith(s);if(R)placeResizeHandle(stage.querySelector('.wf-resize'),s,R);return}const canvas=h('div','wf-canvas');canvas.append(s);if(R&&TALL_TYPES.has(R.b.type))canvas.append(resizeHandle(R,s));stage.replaceChildren(canvas);requestAnimationFrame(()=>{const handle=stage.querySelector('.wf-resize');if(handle)placeResizeHandle(handle,s,R)});return}
   if(view==='code'){const raw=exportHTML();const shown=codeTab==='css'?prettyCSS((raw.match(/<style>([\s\S]*?)<\/style>/)||[,'',TsukuruReal.CSS])[1]||TsukuruReal.CSS):displayHTML(omitImages?abbreviateDataURIs(raw):raw);
    const hi=codeTab==='css'?highlightCSS(shown):highlightHTML(shown);
    const pane=h('div','wf-code-view');pane.setAttribute('role','region');pane.setAttribute('aria-label',codeTab==='css'?'書き出しHTMLに埋め込まれているCSS':'書き出すHTMLのソース');
@@ -186,6 +199,23 @@ function wireframe(box){const st=load(),prefs=viewPrefs();let wf=st.draft,sel=nu
   const lab=h('label','wf-lab');lab.append(h('span','','端末の画像を選択（URLを置き換え）'));const file=h('input','wf-name');file.type='file';file.accept='image/png,image/jpeg,image/webp,image/gif';file.onchange=async()=>{if(!file.files[0])return;file.disabled=true;try{const data=await TsukuruReal.compress(file.files[0]);b.content.image=data;if(save())status.textContent='画像を縮小して保存しました';draw()}catch(e){status.textContent=e.message}finally{file.disabled=false}};lab.append(file);parent.append(lab);
   parent.append(btn('画像を外す','ghost',()=>{b.content.image='';save();draw()}));
  }
+ function heightFields(parent,b){
+  const lab=h('label','wf-lab');lab.append(h('span','','高さ（px）'));
+  const row=h('div','wf-height-row');
+  const input=h('input','wf-name wf-height-input');input.type='number';input.id='wfHeightPx';input.min=HMIN;input.max=HMAX;input.step=HSNAP;input.setAttribute('aria-label','高さ（px）');input.value=String(blockH(b,wf.frame));
+  const apply=(snap)=>{const n=Number(input.value);if(!Number.isFinite(n)){input.value=String(blockH(b,wf.frame));return}setBlockH(b,wf.frame,n,snap);input.value=String(blockH(b,wf.frame));save();drawStage();syncHeightUI(b)};
+  input.oninput=()=>apply(false);input.onchange=()=>apply(true);
+  const reset=btn('自動に戻す','ghost wf-height-reset',()=>{clearBlockH(b,wf.frame);save();draw()});reset.disabled=customH(b,wf.frame)==null;
+  row.append(input,reset);lab.append(row);parent.append(lab);
+  parent.append(h('p','wt-desc',wf.frame==='game'?'この枠での高さです。「自動に戻す」と高さS/M/Lの既定値になります。下辺のハンドルをドラッグしても変えられます。':`この値は「${FRAMES[wf.frame].label}」枠だけの高さです。Webとスマホは別々に設定できます。未設定の枠は高さS/M/Lの自動値になります。実表示・HTMLコード・書き出しにも反映されます。`));
+ }
+ function placeResizeHandle(handle,svgEl,R){if(!handle||!svgEl||!R||!svgEl.parentElement)return;const wr=svgEl.getBoundingClientRect(),cr=svgEl.parentElement.getBoundingClientRect(),Lo=layout(wf),sx=wr.width/Lo.W;handle.style.left=(wr.left-cr.left+R.x*sx)+'px';handle.style.top=(wr.top-cr.top+(R.y+R.h)*sx-22)+'px';handle.style.width=Math.max(44,R.w*sx)+'px'}
+ function resizeHandle(R,svgEl){const b=R.b,handle=h('button','wf-resize');handle.type='button';handle.setAttribute('role','slider');handle.setAttribute('aria-orientation','vertical');handle.setAttribute('aria-label','高さ');handle.setAttribute('aria-valuemin',String(HMIN));handle.setAttribute('aria-valuemax',String(HMAX));const v=blockH(b,wf.frame);handle.setAttribute('aria-valuenow',String(v));handle.setAttribute('aria-valuetext',v+'ピクセル');handle.tabIndex=0;handle.style.touchAction='none';
+  handle.addEventListener('pointerdown',e=>{if(e.button)return;e.preventDefault();e.stopPropagation();heightDrag={b,frame:wf.frame,startY:e.clientY,startH:blockH(b,wf.frame)}});
+  handle.addEventListener('click',e=>e.stopPropagation());
+  handle.onkeydown=e=>{const step=e.shiftKey?40:HSNAP;let next=null;if(e.key==='ArrowDown'||e.key==='ArrowRight')next=blockH(b,wf.frame)+step;else if(e.key==='ArrowUp'||e.key==='ArrowLeft')next=blockH(b,wf.frame)-step;else if(e.key==='Home')next=HMIN;else if(e.key==='End')next=HMAX;else return;e.preventDefault();setBlockH(b,wf.frame,next,true);save();draw();stage.querySelector('.wf-resize')?.focus()};
+  return handle}
+ function syncHeightUI(b){const inp=box.querySelector('#wfHeightPx');if(inp)inp.value=String(blockH(b,wf.frame));const rst=box.querySelector('.wf-height-reset');if(rst)rst.disabled=customH(b,wf.frame)==null;const sl=stage.querySelector('.wf-resize');if(sl){const v=blockH(b,wf.frame);sl.setAttribute('aria-valuenow',String(v));sl.setAttribute('aria-valuetext',v+'ピクセル')}}
  function renderItems(bs,ul){bs.forEach((b,i)=>{
   const li=h('li','wf-item'+(b.id===sel?' wf-on':''));li.dataset.id=b.id;const nm=PART[b.type].name;
   const head=h('div','wf-ihead'),acts=h('div','wf-iacts');head.append(btn((i+1)+'. '+nm,'ghost wf-pick',()=>pickBlock(b.id),nm+'の内容を編集'));
@@ -197,9 +227,11 @@ function wireframe(box){const st=load(),prefs=viewPrefs();let wf=st.draft,sel=nu
    if(b.type==='header'){field(edit,b,'メニュー項目（1行に1つ。「ラベル | URL」でリンク先も指定。空ならメニューなし）','menu','textarea');edit.append(h('p','wt-desc','例：ホーム | ./　／　お問い合わせ | #contact'))}
    if(b.type==='heading'){const lab=h('label','wf-lab');lab.append(h('span','','見出しレベル'));const se=h('select','wf-select');se.setAttribute('aria-label','見出しレベル');for(const v of ['h1','h2','h3']){const o=h('option','',v);o.value=v;o.selected=v===b.content.level;se.append(o)}se.onchange=()=>{b.content.level=se.value;save();drawStage()};lab.append(se);edit.append(lab,h('p','wt-desc','最初の見出しはh1、以降は飛び級しない階層に自動調整します。'))}
    if(b.type==='image'||b.type==='hero')imageFields(edit,b);
+   if(TALL_TYPES.has(b.type))heightFields(edit,b);
    if(b.type==='button'||b.type==='hero'){if(b.type==='hero')field(edit,b,'ボタンの文字','buttonText');field(edit,b,'リンク先URL（https://… / #… / ./…）','href','text')}
    if(b.type==='columns')edit.append(seg('列数',[[2,'2'],[3,'3'],[4,'4']],b.cols,v=>{const old=b.children;b.cols=v;b.children=Array.from({length:v},(_,j)=>old[j]||[]);if(v<old.length)b.children[v-1].push(...old.slice(v).flat());save();draw()}),h('p','wt-desc','スマホでは列の順に縦積み。列数を減らすと末尾の列へ子ブロックを移します。'));
-   edit.append(seg('高さ',SIZES,b.h,v=>{b.h=v;save();draw()}),seg('幅',wf.frame==='game'?[['half','標準'],['full','全幅']]:[['full','全幅'],['half','半分']],b.w,v=>{b.w=v;save();draw()}));
+   const hSeg=seg('高さ',SIZES,customH(b,wf.frame)!=null?'':b.h,v=>{b.h=v;clearBlockH(b,wf.frame);save();draw()});if(customH(b,wf.frame)!=null){const first=hSeg.querySelector('[role="radio"]');if(first)first.tabIndex=0}
+   edit.append(hSeg,seg('幅',wf.frame==='game'?[['half','標準'],['full','全幅']]:[['full','全幅'],['half','半分']],b.w,v=>{b.w=v;save();draw()}));
    if(wf.frame==='game')edit.append(seg('縦',VPOS,b.pos[0],v=>{b.pos=v+b.pos[1];save();draw()}),seg('横',HPOS,b.pos[1],v=>{b.pos=b.pos[0]+v;save();draw()}));li.append(edit);
   }else li.append(h('p','wt-desc',String(b.content.text||b.label||nm).slice(0,80)));
   const childUI=(child,j)=>{const sub=h('div','wf-children');sub.append(h('h3','wf-child-title',b.type==='columns'?(j+1)+'列目':'セクションの中'));const lab=h('label','wf-lab');lab.append(h('span','','追加する子ブロック'));const se=h('select','wf-select');se.setAttribute('aria-label','追加する子ブロック');for(const p of WEB_PARTS.filter(p=>!['header','footer'].includes(p[0]))){const o=h('option','',p[1]);o.value=p[0];se.append(o)}lab.append(se);sub.append(lab,btn('子ブロックを追加','ghost wf-add-child',()=>{const nb=newBlock(se.value,wf.frame);child.push(nb);sel=nb.id;save();draw()}));const ol=h('ol','wf-blocks');renderItems(child,ol);sub.append(ol);li.append(sub)};
@@ -236,7 +268,7 @@ function wireframe(box){const st=load(),prefs=viewPrefs();let wf=st.draft,sel=nu
  draw()}
 
 window.TsukuruPages=Object.assign(window.TsukuruPages||{},{wireframe});
-window.TsukuruWireframe={FRAMES,WEB_PARTS,GAME_PARTS,layout,prims,toHTML,toCanvas,KEY,VKEY,newBlock,toRealHTML:(wf,title)=>TsukuruReal.documentHTML(wf,layout(wf),title),abbreviateDataURIs,prettyCSS};
+window.TsukuruWireframe={FRAMES,WEB_PARTS,GAME_PARTS,layout,prims,toHTML,toCanvas,KEY,VKEY,newBlock,blockH,customH,setBlockH,clearBlockH,defaultH,HMIN,HMAX,HSNAP,TALL_TYPES,toRealHTML:(wf,title)=>TsukuruReal.documentHTML(wf,layout(wf),title),abbreviateDataURIs,prettyCSS};
 /* 検索（「ワイヤー」「wireframe」）から開けるようにする */
 try{AtlasGlobalSearch.index.push({title:'ワイヤーフレーム',text:'wireframe ワイヤー 画面設計 レイアウト案 Web スマホ ゲーム PNG HTML骨組み 実表示 HTMLコード HTML書き出し ページ作成',domain:'web',open:()=>TsukuruShell.openPage('wireframe','ワイヤーフレーム')})}catch{}
 })();
