@@ -202,9 +202,11 @@ function wireframe(box){const st=load(),prefs=viewPrefs();let wf=st.draft,sel=nu
  function heightFields(parent,b){
   const lab=h('label','wf-lab');lab.append(h('span','','高さ（px）'));
   const row=h('div','wf-height-row');
-  const input=h('input','wf-name wf-height-input');input.type='number';input.id='wfHeightPx';input.min=HMIN;input.max=HMAX;input.step=HSNAP;input.setAttribute('aria-label','高さ（px）');input.value=String(blockH(b,wf.frame));
-  const apply=(snap)=>{const n=Number(input.value);if(!Number.isFinite(n)){input.value=String(blockH(b,wf.frame));return}setBlockH(b,wf.frame,n,snap);input.value=String(blockH(b,wf.frame));save();drawStage();syncHeightUI(b)};
-  input.oninput=()=>apply(false);input.onchange=()=>apply(true);
+  const input=h('input','wf-name wf-height-input');input.type='number';input.id='wfHeightPx';input.min=HMIN;input.max=HMAX;input.step=1;input.inputMode='numeric';input.setAttribute('aria-label','高さ（px）');input.value=String(blockH(b,wf.frame));
+  // 入力途中（例：「5」→「50」→「500」）は欄を書き換えない。範囲内の値だけプレビューに反映し、確定（Enter・フォーカスを外す）で丸める
+  const live=()=>{const t=input.value.trim();if(t==='')return;const n=Number(t);if(!Number.isFinite(n)||n<HMIN||n>HMAX)return;setBlockH(b,wf.frame,n,false);save();drawStage();const sl=stage.querySelector('.wf-resize');if(sl){sl.setAttribute('aria-valuenow',String(blockH(b,wf.frame)));}const rst=box.querySelector('.wf-height-reset');if(rst)rst.disabled=false};
+  const commit=()=>{const t=input.value.trim();const n=Number(t);if(t===''||!Number.isFinite(n)){input.value=String(blockH(b,wf.frame));return}setBlockH(b,wf.frame,n,true);input.value=String(blockH(b,wf.frame));save();drawStage();syncHeightUI(b)};
+  input.oninput=live;input.onchange=commit;input.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();commit()}};
   const reset=btn('自動に戻す','ghost wf-height-reset',()=>{clearBlockH(b,wf.frame);save();draw()});reset.disabled=customH(b,wf.frame)==null;
   row.append(input,reset);lab.append(row);parent.append(lab);
   parent.append(h('p','wt-desc',wf.frame==='game'?'この枠での高さです。「自動に戻す」と高さS/M/Lの既定値になります。下辺のハンドルをドラッグしても変えられます。':`この値は「${FRAMES[wf.frame].label}」枠だけの高さです。Webとスマホは別々に設定できます。未設定の枠は高さS/M/Lの自動値になります。実表示・HTMLコード・書き出しにも反映されます。`));
